@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<title>Berfin için Waffle Daveti</title>
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+        text-align: center;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        color: #f5f5f5;
+        background:
+            radial-gradient(circle at top, rgba(255,255,255,0.08), transparent 55%),
+            radial-gradient(circle at bottom, rgba(255,255,255,0.04), #050509);
+        overflow: hidden;
+    }
+
+    .smoke-layer {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        background:
+            radial-gradient(circle at 10% 20%, rgba(255,255,255,0.04), transparent 60%),
+            radial-gradient(circle at 80% 70%, rgba(255,255,255,0.03), transparent 55%);
+        mix-blend-mode: screen;
+        opacity: 0.7;
+        animation: smokeMove 18s infinite alternate ease-in-out;
+        z-index: -1;
+    }
+
+    @keyframes smokeMove {
+        0%   { transform: translate3d(-10px, 0, 0) scale(1); }
+        50%  { transform: translate3d(10px, -10px, 0) scale(1.05); }
+        100% { transform: translate3d(-15px, 10px, 0) scale(1.02); }
+    }
+
+    .card {
+        background: rgba(15, 15, 20, 0.88);
+        border-radius: 18px;
+        padding: 32px 26px 30px;
+        max-width: 420px;
+        width: 90%;
+        box-shadow: 0 22px 45px rgba(0, 0, 0, 0.9);
+        border: 1px solid rgba(255,255,255,0.04);
+        backdrop-filter: blur(12px);
+        animation: fadeIn 0.8s ease-out;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(18px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    h1 {
+        font-size: 26px;
+        margin: 0 0 18px;
+        color: #f8f0d5;
+        font-weight: 600;
+    }
+
+    .subtitle {
+        font-size: 15px;
+        margin-bottom: 26px;
+        color: #b0b0b0;
+    }
+
+    .buttons {
+        display: flex;
+        justify-content: center;
+        gap: 16px;
+        flex-wrap: wrap;
+        margin-bottom: 16px;
+    }
+
+    .btn {
+        padding: 14px 32px;
+        font-size: 20px;
+        border-radius: 999px;
+        border: 2px solid #d6ae55;
+        background: transparent;
+        color: #f3e2b3;
+        cursor: pointer;
+        transition: transform 0.22s ease, box-shadow 0.22s ease, background 0.22s ease, border-color 0.22s ease;
+        min-width: 110px;
+    }
+
+    #final-msg {
+        margin-top: 18px;
+        font-size: 22px;
+        font-weight: 500;
+        color: #f8f0d5;
+        display: none;
+    }
+
+    .note {
+        margin-top: 8px;
+        font-size: 13px;
+        color: #777;
+    }
+
+    .waffle-wrapper {
+        margin-top: 26px;
+        display: none;
+        animation: fadeIn 0.7s ease-out;
+    }
+
+    .waffle-img {
+        width: 160px;
+        max-width: 45vw;
+        border-radius: 16px;
+        object-fit: cover;
+        box-shadow: 0 14px 30px rgba(0,0,0,0.85);
+        border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .label {
+        font-size: 13px;
+        margin-top: 8px;
+        color: #9f9f9f;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+    }
+
+    .date {
+        margin-top: 18px;
+        font-size: 14px;
+        color: #c1a975;
+        letter-spacing: 0.5px;
+    }
+</style>
+</head>
+<body>
+
+<div class="smoke-layer"></div>
+
+<div class="card">
+    <h1>Berfin, waffle yapıyorum.</h1>
+    <div class="subtitle">10.12.2025 Saat 19:00 da benimle waffle yemeye eve gelmek ister misin?</div>
+
+    <div class="buttons">
+        <button class="btn" id="yesBtn">Evet</button>
+        <button class="btn" id="noBtn">Hayır</button>
+    </div>
+
+    <div id="final-msg">Güzel. Seni bekliyorum, Berfin.</div>
+    <div class="note" id="note-text">Karar senin, ama waffle cidden iyi olacak.</div>
+
+    <div class="waffle-wrapper" id="waffleWrapper">
+        <img class="waffle-img" src="https://images.pexels.com/photos/704569/pexels-photo-704569.jpeg" alt="Waffle">
+        <div class="label">Hazır olduğunda kapı açık.</div>
+    </div>
+
+    <!-- 📌 Eklenen tarih -->
+    <div class="date">10.12.2025 • Saat 19:00</div>
+</div>
+
+<script>
+    const yesBtn = document.getElementById("yesBtn");
+    const noBtn = document.getElementById("noBtn");
+    const msg = document.getElementById("final-msg");
+    const note = document.getElementById("note-text");
+    const waffleWrapper = document.getElementById("waffleWrapper");
+
+    let yesScale = 1;
+    let noScale = 1;
+
+    yesBtn.onclick = () => {
+        msg.style.display = "block";
+        yesBtn.style.display = "none";
+        noBtn.style.display = "none";
+        note.textContent = "Hazırlanmaya başla, Berfin.";
+        waffleWrapper.style.display = "block";
+    };
+
+    noBtn.onclick = () => {
+        yesScale += 0.25;
+        noScale -= 0.15;
+
+        if (yesScale > 2.8) yesScale = 2.8;
+        if (noScale < 0.18) noScale = 0.18;
+
+        yesBtn.style.transform = `scale(${yesScale})`;
+        noBtn.style.transform = `scale(${noScale})`;
+
+        if (noScale <= 0.22) {
+            noBtn.disabled = true;
+            noBtn.innerText = "Artık hayır yok, Berfin.";
+            note.textContent = "İkimiz de cevabı biliyoruz bence.";
+        } else {
+            const texts = [
+                "Bak waffle gerçekten iyi olacak.",
+                "Hiç düşünmeden 'Evet' diyebilirsin bu arada.",
+                "İnat ediyorsun ama Evet tuşu seni bekliyor.",
+                "Sonra 'keşke gelseydim' deme, Berfin.",
+            ];
+            note.textContent = texts[Math.floor(Math.random() * texts.length)];
+        }
+    };
+</script>
+
+</body>
+</html>
